@@ -1,5 +1,6 @@
   import {cart} from '../data/cart.js'
   import {products} from '../data/products.js'
+  import { convertMoney } from '../reusable/money.js'
   // to store the html after each loop
     let htmlProduct = ''
   
@@ -26,7 +27,7 @@
           </div>
 
           <div class="product-price">
-            $${(product.priceCents / 100).toFixed(2)}
+            $${convertMoney(product.priceCents)}
           </div>
 
           <div class="product-quantity-container">
