@@ -1,4 +1,4 @@
-import { cart , deleteCartItem} from "../data/cart.js";
+import { cart , deleteCartItem, saveTolocalStorageCart} from "../data/cart.js";
 import { products } from "../data/products.js";
 import { convertMoney } from "../reusable/money.js";
 
@@ -91,7 +91,6 @@ function renderNewCart(){
                 </div>
             </div>
 `});
-
 document.querySelector(".order-summary").innerHTML = htmlCart
 
 document.querySelectorAll('.js-delete-button').forEach(button => {
@@ -100,7 +99,8 @@ document.querySelectorAll('.js-delete-button').forEach(button => {
         deleteCartItem(productId);
         renderNewCart()
         console.log(cart);
-        
+         //after deleting the product dom it'll be saved in the localStorage
+        saveTolocalStorageCart()
     })
     
 });

@@ -1,4 +1,4 @@
-  import {cart} from '../data/cart.js'
+  import {cart, saveTolocalStorageCart} from '../data/cart.js'
   import {products} from '../data/products.js'
   import { convertMoney } from '../reusable/money.js'
   // to store the html after each loop
@@ -82,6 +82,8 @@
             quantity : quantitySelector
           })
         }
+         //after adding the product tothe cart  it'll be saved in the localStorage
+        saveTolocalStorageCart()
     }
 
     function countTotal(){
