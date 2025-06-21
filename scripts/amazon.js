@@ -1,3 +1,5 @@
+  import {cart} from '../data/cart.js'
+  import {products} from '../data/products.js'
   // to store the html after each loop
     let htmlProduct = ''
   
@@ -28,7 +30,7 @@
           </div>
 
           <div class="product-quantity-container">
-            <select class = "js-quantity">
+            <select class = "js-quantity-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -44,7 +46,7 @@
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-added-msg-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -58,16 +60,11 @@
     
     document.querySelector('.products-grid').innerHTML = htmlProduct
 
-    //Loop over every "Add to Cart" button on the page
-
-    document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
-      // Add a click event listener to each button
-      button.addEventListener('click', ()=>{
-      // Get the product ID from the data attribute
-        const productId = button.dataset.productId
-        // Variable to store a reference to the matching product in cart if found
+    function addToCart(productId){
+       // Variable to store a reference to the matching product in cart if found
         let matchingItem;
-        
+        const selectElm = document.querySelector(`.js-quantity-${productId}`)
+       const quantitySelector = Number(selectElm.value)
         cart.forEach((item)=>{
           // CHECK If the product ID matches one already in the cart and then store it
           if(productId === item.productId){
@@ -75,21 +72,46 @@
         })        
         // If we found the product in the cart it'll increase the quantity. matchingItem is a truthy value
         if(matchingItem){
-          matchingItem.quantity += 1 
+          matchingItem.quantity += quantitySelector
         }
         // if the product didn't exist it will add it to the cart as a new item with quantity 1
         else {
           cart.push({
             productId : productId,
-            quantity : 1
+            quantity : quantitySelector
           })
         }
-        
-        
-      console.log(cart);
-      
+    }
 
-        
+    function countTotal(){
+       let totalQuantiy = 0;
+       
+        cart.forEach((item)=>{
+          totalQuantiy += item.quantity
+        })
+          document.querySelector('.js-cart-quantity').innerHTML = totalQuantiy 
+
+    }
+
+    //Loop over every "Add to Cart" button on the page
+
+    document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
+      // Add a click event listener to each button
+      button.addEventListener('click', ()=>{
+      // Get the product ID from the data attribute
+        const productId = button.dataset.productId
+       addToCart(productId)
+       countTotal(productId)
+       addedMsg(productId)
       })
 })
 
+console.log(cart);
+
+function addedMsg(productId){
+  const addElem = document.querySelector(`.js-added-msg-${productId}`)
+  addElem.classList.add("visible")
+  setTimeout(()=>{
+    addElem.classList.remove("visible")
+  },2000)
+}
