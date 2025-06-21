@@ -1,11 +1,9 @@
 import { cart , deleteCartItem} from "../data/cart.js";
 import { products } from "../data/products.js";
 import { convertMoney } from "../reusable/money.js";
+let htmlCart = ''
 
-renderNewCart();
-function renderNewCart(){
-    let htmlCart = ''
-     cart.forEach(cartItem => {
+    cart.forEach(cartItem => {
         // check if the cartId is the Same as ProductId if true then we can get the whole properties of the product without saving it twice in cart and product 
         const productId = cartItem.productId
         let matchingId;
@@ -15,7 +13,10 @@ function renderNewCart(){
             })
     
         htmlCart += `
-            <div class="cart-item-container">
+            <div class="cart-item-container
+            //each container will have a unique id for each product  
+                js-cart-item-countainer-${matchingId.id}
+            ">
                 <div class="delivery-date">
                 Delivery date: Tuesday, June 21
                 </div>
@@ -97,11 +98,12 @@ document.querySelector(".order-summary").innerHTML = htmlCart
 document.querySelectorAll('.js-delete-button').forEach(button => {
     button.addEventListener('click', ()=>{
         let productId = button.dataset.productId
-        deleteCartItem(productId);
-        renderNewCart()
-        console.log(cart);
+        deleteCartItem(productId)
+        //get the countainer using the dom with a specific id for each product 
+        const deletedContainer = document.querySelector(`.js-cart-item-countainer-${productId}`)
+        //.remove() deletes the container from the dom 
+        deletedContainer.remove()
         
     })
     
 });
-}
